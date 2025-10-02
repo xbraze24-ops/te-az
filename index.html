@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cars A–Z — Encyclopedia & Reference</title>
+  <meta name="description" content="Comprehensive A-to-Z reference about cars: types, components, powertrains, maintenance, buying, safety, fuels, electrification, glossary, and more — with search." />
+  <style>
+    :root{
+      --bg:#0b1220; --card:#0f1724; --text:#e6eef6; --muted:#9aa4b2; --accent:#06b6d4;
+      --glass: rgba(255,255,255,0.03); --maxw:1200px; --wf: Inter, ui-sans-serif, system-ui, Roboto, "Segoe UI", Arial;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:var(--wf);background:linear-gradient(180deg,#041022,#07132a);color:var(--text);-webkit-font-smoothing:antialiased}
+    .wrap{max-width:var(--maxw);margin:22px auto;padding:18px}
+    header{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+    .logo{width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#7dd3fc);display:flex;align-items:center;justify-content:center;color:#012;font-weight:800;font-size:22px;box-shadow:0 8px 30px rgba(2,6,23,0.6)}
+    h1{margin:0;font-size:22px}
+    .subtitle{color:var(--muted);font-size:13px;margin-top:4px}
+    .controls{display:flex;gap:8px;align-items:center;margin:14px 0;flex-wrap:wrap}
+    .search{display:flex;gap:8px;flex:1;min-width:220px}
+    input[type="search"]{flex:1;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+    button, .letter{cursor:pointer;border-radius:10px;padding:8px 10px;border:1px solid rgba(255,255,255,0.04);background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);color:inherit}
+    button:active, .letter:active{transform:translateY(1px)}
+    .letters{display:flex;gap:6px;flex-wrap:wrap}
+    nav{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    main{display:grid;grid-template-columns:280px 1fr;gap:18px}
+    aside{position:sticky;top:20px;height:calc(100vh - 40px);overflow:auto;padding:12px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border:1px solid rgba(255,255,255,0.03)}
+    .toc a{display:block;color:var(--muted);text-decoration:none;padding:6px;border-radius:6px;margin-bottom:6px}
+    .toc a:hover{background:var(--glass);color:var(--text)}
+    section.content{padding:12px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);border:1px solid rgba(255,255,255,0.03);min-height:60vh}
+    .az-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+    .card{padding:12px;border-radius:8px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border:1px solid rgba(255,255,255,0.03)}
+    .topic-title{display:flex;justify-content:space-between;align-items:center;gap:8px}
+    .topic-title h3{margin:0;font-size:16px}
+    .muted{color:var(--muted);font-size:13px}
+    .collapse {margin-top:8px;color:var(--muted);line-height:1.6;display:none}
+    .card.open .collapse{display:block}
+    footer{margin-top:18px;color:var(--muted);font-size:13px;text-align:center}
+    mark{background:linear-gradient(90deg,#ffd54d55,#ffd54d55);color:#001}
+    .results{font-size:13px;color:var(--muted);margin-left:8px}
+    @media (max-width:960px){main{grid-template-columns:1fr} aside{position:relative;height:auto}}
+    /* print-friendly */
+    @media print{body{background:#fff;color:#000} .logo, .controls, aside, button{display:none} section.content{border:none;background:transparent}}
+  </style>
+</head>
+<body>
+  <div class="wrap" id="app">
+    <header>
+      <div class="logo">A–Z</div>
+      <div>
+        <h1>Cars A–Z — Encyclopedia</h1>
+        <div class="subtitle">Comprehensive single-page reference for everything car-related. Use the A–Z index or search to jump directly to topics.</div>
+      </div>
+    </header>
+
+    <div class="controls" role="region" aria-label="controls">
+      <div class="search" role="search">
+        <input id="q" type="search" placeholder="Search topics, e.g., 'battery', 'ABS', 'hybrid' — press Enter" aria-label="Search the Cars Encyclopedia" />
+        <button id="btnSearch">Search</button>
+        <div class="results" id="results" aria-live="polite"></div>
+      </div>
+
+      <nav class="letters" aria-label="Alphabet index">
+        <!-- Letters A-Z dynamically created by JS, placeholder for accessibility -->
+      </nav>
+      <div style="margin-left:auto;display:flex;gap:8px">
+        <button id="btnExpand">Expand All</button>
+        <button id="btnCollapse">Collapse All</button>
+        <button id="btnPrint" title="Print / Save as PDF">Print</button>
+      </div>
+    </div>
+
+    <main>
+      <aside aria-label="Contents">
+        <div class="toc">
+          <strong style="display:block;margin-bottom:8px">Contents</strong>
+          <!-- auto-filled TOC -->
+        </div>
+      </aside>
+
+      <section class="content" id="content" aria-live="polite">
+        <!-- A–Z Sections inserted by JS -->
+      </section>
+    </main>
+
+    <footer>
+      Built as a single-file A–Z reference. Tip: press <code>Ctrl+F</code> to find text on this page, or use the search box above for highlighted results.
+    </footer>
+  </div>
+
+  <script>
+    // ---------- Data: topics grouped by letter ----------
+    // Expand or replace strings with more detailed content. Each topic object: {title, body}
+    const DATA = {
+      "A": [
+        {title:"ABS (Anti-lock Braking System)", body:"Prevents wheel lock-up during hard braking by modulating brake pressure; improves steerability under heavy braking."},
+        {title:"Airbags", body:"Supplemental restraint systems that inflate in milliseconds during certain crash conditions to protect occupants."},
+        {title:"Aerodynamics", body:"The study of airflow around the car; lowers drag and improves fuel efficiency and stability at speed."}
+      ],
+      "B": [
+        {title:"Battery (12V & Traction)", body:"12V battery powers electronics; high-voltage traction batteries power electric motors in HEV/PHEV/BEV. Battery health affects range and performance."},
+        {title:"Brakes", body:"Disc and drum systems; modern cars include ABS, EBD, and brake assist features."},
+        {title:"Body styles", body:"Examples: sedan, hatchback, coupe, convertible, SUV, crossover, minivan, pickup, wagon."}
+      ],
+      "C": [
+        {title:"Chassis", body:"The vehicle's structural framework which supports all components including body, powertrain and suspension."},
+        {title:"Compression ratio", body:"Internal combustion engine measurement of cylinder pressure increase; affects efficiency and fuel requirements."},
+        {title:"Cooling system", body:"Includes radiator, thermostat, coolant, fan — prevents engine overheating."}
+      ],
+      "D": [
+        {title:"Drivetrain / Drivetrain Layouts", body:"Includes transmission, driveshaft, differential(s). Layouts: FWD (front-wheel drive), RWD, AWD/4WD."},
+        {title:"Diagnostics (OBD-II)", body:"On-Board Diagnostics port provides standardized trouble codes useful for fault-finding and maintenance."}
+      ],
+      "E": [
+        {title:"Engine types", body:"Inline, V, boxer, rotary. Fuel types: gasoline (petrol), diesel, natural gas, hydrogen."},
+        {title:"Electric Vehicles (EVs / BEVs)", body:"Powered solely by electric motors and battery packs. Range, charging time, and battery thermal management are key concerns."},
+        {title:"Emissions control", body:"Catalytic converters, particulate filters, EGR systems, and selective catalytic reduction (SCR) reduce harmful emissions."}
+      ],
+      "F": [
+        {title:"Fuel economy", body:"Measured in MPG or L/100km; influenced by vehicle mass, aerodynamics, engine efficiency, driving style, and tire selection."},
+        {title:"Fuel types", body:"Gasoline, diesel, CNG, LPG, biofuels, and synthetic fuels; each has tradeoffs in energy density and emissions."}
+      ],
+      "G": [
+        {title:"Gearbox / Transmission", body:"Manual, automatic, CVT, dual-clutch (DCT). Influences driving feel and efficiency."},
+        {title:"Ground clearance", body:"Height between road and underside of vehicle; affects off-road capability and handling."}
+      ],
+      "H": [
+        {title:"Hybrid vehicles (HEV / PHEV)", body:"Combine ICE with electric motors. HEVs recharge via regenerative braking; PHEVs add external charging for extended electric range."},
+        {title:"Horsepower & Torque", body:"Power (hp/kW) and torque (Nm/lb-ft) describe engine/motor output and influence acceleration and towing."}
+      ],
+      "I": [
+        {title:"Infotainment", body:"In-car entertainment and info systems: displays, navigation, smartphone integration (Apple CarPlay/Android Auto)."},
+        {title:"Insurance & ownership costs", body:"Premiums depend on model, safety ratings, driver history, theft risk, repair costs, and region."}
+      ],
+      "J": [
+        {title:"Jump-starting", body:"Procedure to start a car with a dead 12V battery using jumper cables or a jump pack. Follow polarity and safety guidelines."}
+      ],
+      "K": [
+        {title:"Keyless entry & immobiliser", body:"Convenience systems for locking/unlocking; immobilisers prevent engine start without the correct key fob."}
+      ],
+      "L": [
+        {title:"Licensing & registration", body:"Legal requirements vary by country: driver's license, vehicle registration, inspection, and emissions checks."},
+        {title:"Lubrication & oil types", body:"Engine oils differ by viscosity and spec (e.g., 5W-30); following manufacturer's spec is critical for longevity."}
+      ],
+      "M": [
+        {title:"Maintenance schedule", body:"Regular service items: oil, filters, brakes, tires, belts, coolant, transmissions — follow manufacturer schedule."},
+        {title:"Mileage & odometer", body:"Recording distance traveled; important for resale and service intervals."}
+      ],
+      "N": [
+        {title:"Navigation & telematics", body:"GPS navigation, remote diagnostics, stolen-vehicle tracking, OTA updates (over-the-air)."}
+      ],
+      "O": [
+        {title:"OEM vs Aftermarket", body:"OEM = original equipment manufacturer parts; aftermarket parts may be cheaper but vary in quality."},
+        {title:"Overtaking & safety tips", body:"Safe passing requires checking mirrors, blind spots, signaling, and ensuring sufficient acceleration/clearance."}
+      ],
+      "P": [
+        {title:"Power output & performance tuning", body:"Performance is tuned by engine mapping, forced induction (turbo/supercharger), and drivetrain mods."},
+        {title:"Parking aids", body:"Parking sensors, cameras, and automated park assist technologies reduce parking accidents."}
+      ],
+      "Q": [
+        {title:"Quarter-mile & performance testing", body:"Common performance benchmark in motorsports and tuning communities."}
+      ],
+      "R": [
+        {title:"Regenerative braking", body:"Electrified vehicles use motor(s) to recover kinetic energy and recharge batteries during braking."},
+        {title:"Roadworthiness & inspections", body:"Periodic vehicle checks maintain safety and emissions standards."}
+      ],
+      "S": [
+        {title:"Suspension systems", body:"MacPherson struts, multi-link, leaf springs — affect comfort and handling."},
+        {title:"Safety ratings (IIHS, Euro NCAP)", body:"Independent crash testing organisations publish results to inform buyers."},
+        {title:"Steering systems", body:"Rack-and-pinion, electric power steering; impacts feel and fuel consumption."}
+      ],
+      "T": [
+        {title:"Tires & wheels", body:"Size, load rating, speed rating, compound and tread pattern dictate grip, comfort and noise."},
+        {title:"Transmission fluid & clutch", body:"Maintenance items in manual/automatic transmissions; wear affects shifting and longevity."}
+      ],
+      "U": [
+        {title:"ULEV / ZEV standards", body:"Ultra-low/zero-emission vehicle regulations influence incentives and future fleets."}
+      ],
+      "V": [
+        {title:"Vehicle dynamics", body:"How mass distribution, suspension and tires influence stability, under/oversteer and handling."},
+        {title:"VIN (Vehicle Identification Number)", body:"Unique identifier with production data; use to check history and recalls."}
+      ],
+      "W": [
+        {title:"Warranties", body:"Manufacturer warranties cover defects for a time/mileage; extended warranties are optional."},
+        {title:"Weight & payload", body:"Curb weight vs gross vehicle weight rating (GVWR) important for towing and load limits."}
+      ],
+      "X": [
+        {title:"Xenon / LED / Laser headlights", body:"Lighting tech with different brightness, efficiency and lifespan."}
+      ],
+      "Y": [
+        {title:"Yielding & right-of-way", body:"Traffic rules for intersections and merges vary by country — always follow posted laws."}
+      ],
+      "Z": [
+        {title:"Zero-emission vehicles (ZEVs)", body:"Vehicles with no tailpipe emissions; includes BEVs and fuel cell electric vehicles."},
+        {title:"Zoning & parking policies", body:"Urban regulations that shape parking supply, EV charging access, and curb use."}
+      ]
+    };
+
+    // ---------- Utility: create A-Z index and sections ----------
+    const letters = Object.keys(DATA);
+    const lettersEl = document.querySelector('.letters');
+    const contentEl = document.getElementById('content');
+    const tocEl = document.querySelector('.toc');
+
+    function createUI(){
+      // Letters
+      letters.forEach(l=>{
+        const btn = document.createElement('button');
+        btn.className='letter';
+        btn.textContent=l;
+        btn.title = 'Jump to ' + l;
+        btn.addEventListener('click', ()=> scrollToLetter(l));
+        lettersEl.appendChild(btn);
+      });
+
+      // Populate TOC and content
+      letters.forEach(l=>{
+        const link = document.createElement('a');
+        link.href = '#' + l;
+        link.textContent = l + ' — ' + DATA[l].length + ' topics';
+        tocEl.appendChild(link);
+
+        const sec = document.createElement('section');
+        sec.id = l;
+        sec.style.marginBottom = '18px';
+        sec.innerHTML = `<h2 style="margin-top:0">${l}</h2><div class="az-grid" aria-live="polite"></div>`;
+        const grid = sec.querySelector('.az-grid');
+
+        DATA[l].forEach((t, idx) => {
+          const card = document.createElement('article');
+          card.className='card';
+          card.setAttribute('data-title', t.title);
+          card.setAttribute('data-body', t.body);
+          card.innerHTML = `
+            <div class="topic-title">
+              <h3>${escapeHtml(t.title)}</h3>
+              <button class="toggle" aria-expanded="false" aria-label="Open ${escapeHtml(t.title)}">+</button>
+            </div>
+            <div class="collapse">${escapeHtml(t.body)}</div>
+          `;
+          // toggle
+          card.querySelector('.toggle').addEventListener('click', (ev)=>{
+            card.classList.toggle('open');
+            const btn = ev.target;
+            const isOpen = card.classList.contains('open');
+            btn.textContent = isOpen ? '−' : '+';
+            btn.setAttribute('aria-expanded', isOpen);
+          });
+          grid.appendChild(card);
+        });
+
+        contentEl.appendChild(sec);
+      });
+    }
+
+    function escapeHtml(s){ return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+    function scrollToLetter(l){
+      const el = document.getElementById(l);
+      if(!el) return;
+      el.scrollIntoView({behavior:'smooth', block:'start'});
+      // briefly highlight
+      el.style.transition='background 0.6s';
+      el.style.background='linear-gradient(90deg, rgba(6,182,212,0.06), transparent)';
+      setTimeout(()=>el.style.background='transparent', 1200);
+    }
+
+    // ---------- Search: find and highlight matches ----------
+    const qEl = document.getElementById('q');
+    const btnSearch = document.getElementById('btnSearch');
+    const resultsEl = document.getElementById('results');
+
+    function normalize(s){ return s ? s.toString().toLowerCase() : ''; }
+
+    function clearHighlights() {
+      // remove mark tags by restoring original text nodes
+      document.querySelectorAll('mark').forEach(m=>{
+        const text = document.createTextNode(m.textContent);
+        m.parentNode.replaceChild(text, m);
+      });
+    }
+
+    function performSearch(term){
+      clearHighlights();
+      const q = normalize(term).trim();
+      if(!q){
+        resultsEl.textContent = '';
+        return;
+      }
+      let matches = 0;
+      // search in titles and bodies
+      document.querySelectorAll('.card').forEach(card=>{
+        const title = normalize(card.dataset.title);
+        const body = normalize(card.dataset.body);
+        const nodeTitle = card.querySelector('h3');
+        const nodeBody = card.querySelector('.collapse');
+        let found = false;
+
+        // helper to mark text in element
+        function markElement(el, originalText){
+          const idx = originalText.toLowerCase().indexOf(q);
+          if(idx === -1) return false;
+          // split and insert mark
+          const before = originalText.slice(0, idx);
+          const match = originalText.slice(idx, idx + q.length);
+          const after = originalText.slice(idx + q.length);
+          el.innerHTML = escapeHtml(before) + '<mark>' + escapeHtml(match) + '</mark>' + escapeHtml(after);
+          return true;
+        }
+
+        // title
+        if(title.includes(q)){
+          // highlight first occurrence in title
+          markElement(nodeTitle, card.dataset.title);
+          found = true;
+        } else {
+          // ensure title has original text
+          nodeTitle.innerHTML = escapeHtml(card.dataset.title);
+        }
+
+        // body - it might be collapsed; search the raw body text
+        if(body.includes(q)){
+          // we will expand and highlight in the collapse element
+          card.classList.add('open');
+          card.querySelector('.toggle').textContent='−';
+          card.querySelector('.toggle').setAttribute('aria-expanded','true');
+          markElement(nodeBody, card.dataset.body);
+          found = true;
+        } else {
+          nodeBody.innerHTML = escapeHtml(card.dataset.body);
+          // keep prior open/closed state? We will not auto-collapse here.
+        }
+
+        if(found) matches++;
+      });
+
+      resultsEl.textContent = `${matches} result${matches!==1 ? 's' : ''}`;
+      // scroll to first matched card
+      const firstMark = document.querySelector('mark');
+      if(firstMark){
+        const el = firstMark.closest('.card');
+        if(el){ el.scrollIntoView({behavior:'smooth', block:'center'}); }
+      }
+    }
+
+    btnSearch.addEventListener('click', ()=> performSearch(qEl.value));
+    qEl.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ performSearch(qEl.value); } });
+
+    // ---------- Expand / Collapse / Print ----------
+    document.getElementById('btnExpand').addEventListener('click', ()=>{
+      document.querySelectorAll('.card').forEach(c=>{
+        c.classList.add('open');
+        const b = c.querySelector('.toggle'); if(b){ b.textContent='−'; b.setAttribute('aria-expanded','true'); }
+      });
+    });
+    document.getElementById('btnCollapse').addEventListener('click', ()=>{
+      document.querySelectorAll('.card').forEach(c=>{
+        c.classList.remove('open');
+        const b = c.querySelector('.toggle'); if(b){ b.textContent='+'; b.setAttribute('aria-expanded','false'); }
+      });
+      clearHighlights();
+      resultsEl.textContent = '';
+    });
+    document.getElementById('btnPrint').addEventListener('click', ()=> window.print());
+
+    // ---------- Initialize ----------
+    createUI();
+
+    // Accessibility: focus search when '/' is pressed
+    window.addEventListener('keydown', (e)=>{
+      if(e.key === '/'){
+        const active = document.activeElement;
+        if(active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.isContentEditable)) return;
+        e.preventDefault();
+        qEl.focus();
+      }
+    });
+
+    // Small helper: clicking TOC links will highlight section briefly
+    tocEl.querySelectorAll('a').forEach(a=>{
+      a.addEventListener('click', (ev)=>{
+        ev.preventDefault();
+        const id = a.getAttribute('href').slice(1);
+        scrollToLetter(id);
+      });
+    });
+
+    // Example: deep-linking if URL contains #letter or ?q=term
+    window.addEventListener('load', ()=>{
+      const hash = location.hash.replace('#','');
+      const params = new URLSearchParams(location.search);
+      const q = params.get('q');
+      if(hash && letters.includes(hash.toUpperCase())) scrollToLetter(hash.toUpperCase());
+      if(q) { qEl.value = q; performSearch(q); }
+    });
+  </script>
+</body>
+</html>
